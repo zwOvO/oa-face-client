@@ -13,7 +13,7 @@ public class DBUtils {
 	static {
 		String DBURL = "jdbc:mysql://106.12.152.251:3306/oa";
 		String DBName = "root";
-		String DBPwd = "root";
+		String DBPwd = "daxiongdi_cs1701";
 		try {
 			// 注册JDBC驱动
 			Class.forName("com.mysql.jdbc.Driver");

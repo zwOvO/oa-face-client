@@ -209,7 +209,7 @@ public class FaceClient {
 						DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						frame.setTitle("系统时间:" + format.format(date));
 						ResultSet res = DBUtils.select(String.format(
-								"select username,gender,face_token from tb_user where open_id = (select open_id from tb_record where uuid='%s')",
+								"select username,gender,face_token from tb_user where open_id = (select open_id from tb_record where id='%s')",
 								uuid));
 						try {
 							if (res!=null && res.next()) {

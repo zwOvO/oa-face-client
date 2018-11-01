@@ -67,7 +67,7 @@ public class CompareRunnable implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		Imgcodecs.imwrite("Camera\\" + getUUID() + ".png", getImg());
-		ResultSet rs = DBUtils.select(String.format("select open_id from tb_record where uuid = '%s'", getUUID()));
+		ResultSet rs = DBUtils.select(String.format("select open_id from tb_record where id = '%s'", getUUID()));
 		try {
 			if (rs.next()) {
 				isDeFace = true;
