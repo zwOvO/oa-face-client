@@ -11,9 +11,9 @@ public class DBUtils {
 	}
 
 	static {
-		String DBURL = "jdbc:mysql://106.12.152.251:3306/oa";
-		String DBName = "root";
-		String DBPwd = "daxiongdi_cs1701";
+		String DBURL = "";
+		String DBName = "";
+		String DBPwd = "";
 		try {
 			// 注册JDBC驱动
 			Class.forName("com.mysql.jdbc.Driver");
@@ -32,6 +32,7 @@ public class DBUtils {
 
 	public static ResultSet select(String sql) {
 		try {
+			System.out.println(sql);
 			return stmt.executeQuery(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -42,6 +43,7 @@ public class DBUtils {
 
 	public static int execute(String sql) {
 		try {
+			System.out.println(sql);
 			return stmt.executeUpdate(sql);
 		} catch (Exception e) {
 			return -1;

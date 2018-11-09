@@ -26,6 +26,7 @@ import com.zw.face.DB.DBUtils;
 import com.zw.face.Utils.CaptureBasicUtils;
 import com.zw.face.Utils.CompareRunnable;
 import com.zw.face.Utils.QRCodeUtils;
+import com.zw.face.Utils.TTS;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -129,11 +130,11 @@ public class FaceClient {
 			protected void paintComponent(Graphics d) {
 				super.paintComponent(d);
 				if (uuid != null) {
-					File file = new File("Temp\\QRCode_" + uuid.toString() + ".png");
+					File file = new File("Temp\\QRCode_" + uuid.toString().replaceAll("-", "") + ".png");
 					file.delete();
 				}
-				QRCodeUtils.createQrcode(uuid.toString());
-				ImageIcon icon = new ImageIcon("Temp\\QRCode_" + uuid.toString() + ".png");
+				QRCodeUtils.createQrcode(uuid.toString().replaceAll("-", ""));
+				ImageIcon icon = new ImageIcon("Temp\\QRCode_" + uuid.toString().replaceAll("-", "") + ".png");
 				Image img = icon.getImage();
 				d.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
 			}
@@ -209,11 +210,12 @@ public class FaceClient {
 						DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						frame.setTitle("系统时间:" + format.format(date));
 						ResultSet res = DBUtils.select(String.format(
-								"select username,gender,face_token from tb_user where open_id = (select open_id from tb_record where id='%s')",
-								uuid));
+								"select username,gender,face_token from tb_user where open_id = (select open_id from tb_record where status = 0 and id='%s')",
+								uuid.toString().replaceAll("-", "")));
 						try {
 							if (res!=null && res.next()) {
 								lblName.setText(res.getString("username"));
+								TTS.Speak(res.getString("username")+"同学，请开始你的表演");
 								lblID.setText("用户性别:" + (res.getInt("gender")==1?"男":"女"));
 								faceToken = res.getString("face_token");
 								if (capture == null) {
@@ -270,7 +272,7 @@ public class FaceClient {
 								if (capImg != null && capture != null) {
 									capture.read(capImg);
 									Imgproc.cvtColor(capImg, temp, Imgproc.COLOR_RGB2GRAY);
-									mImg = CaptureBasicUtils.mat2BI(CaptureBasicUtils.detectFace(capImg, uuid.toString(),faceToken));
+									mImg = CaptureBasicUtils.mat2BI(CaptureBasicUtils.detectFace(capImg, uuid.toString().replaceAll("-", ""),faceToken));
 									if (CompareRunnable.isSuccess()) {
 										CompareRunnable.setSuccess(false);
 										Date date = new Date();

@@ -60,13 +60,15 @@ public class CaptureBasicUtils extends JPanel {
 		if (rects != null && rects.length >= 1) {
 			for (Rect rect : rects) {
 				if (rects.length == 1) {
-					Imgproc.rectangle(img, new Point(rect.x, rect.y),
-							new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 0, 255), 2);
-					if (!compareRunnable.isDeFace()) {
-						compareRunnable.setImg(img);
-						compareRunnable.setUUID(uuid);
-						compareRunnable.setFaceToken(faceToken);
-						new Thread(compareRunnable).start();
+					synchronized (rects) {
+						Imgproc.rectangle(img, new Point(rect.x, rect.y),
+								new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 0, 255), 2);
+						if (!compareRunnable.isDeFace()) {
+							compareRunnable.setImg(img);
+							compareRunnable.setUUID(uuid);
+							compareRunnable.setFaceToken(faceToken);
+							new Thread(compareRunnable).start();
+						}
 					}
 				}
 			}
