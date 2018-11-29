@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.zw.face.Config.Config;
 
 public class QRCodeUtils {
@@ -40,44 +42,29 @@ public class QRCodeUtils {
 	 * @throws WriterException
 	 * @throws IOException
 	 */
-	public static String createQrcode(String content) {
-		String qrcodeFilePath = "";
+	/*
+	 * 定义二维码的宽高
+	 */
+	private static int WIDTH=300;
+	private static int HEIGHT=300;
+	private static String FORMAT="png";//二维码格式
+	//生成二维码
+	public static void createZxingqrCode(String content){
+		//定义二维码参数
+		Map hints=new HashMap();
+		hints.put(EncodeHintType.CHARACTER_SET, "utf-8");//设置编码
+		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);//设置容错等级
+		hints.put(EncodeHintType.MARGIN, 2);//设置边距默认是5
+		String imageName = "Temp\\QRCode_" + content + ".png";
 		try {
-			int width = 300;
-			int height = 300;
-			// 二维码的图片格式
-			String qrcodeFormat = "png";
-			/**
-			 * 设置二维码的参数
-			 */
-			HashMap<EncodeHintType, String> hints = new HashMap<EncodeHintType, String>();
-			// 内容所使用编码
-			hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-			BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints);
-			URL url = new URL(Config.UrlQRCode +  content);
-			System.out.println(url.toString());
-			DataInputStream dataInputStream = new DataInputStream(url.openStream());
-			String imageName = "Temp\\QRCode_" + content + ".png";
-
-			FileOutputStream fileOutputStream = new FileOutputStream(new File(imageName));
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-			byte[] buffer = new byte[1024];
-			int length;
-
-			while ((length = dataInputStream.read(buffer)) > 0) {
-				output.write(buffer, 0, length);
-			}
-			fileOutputStream.write(output.toByteArray());
-			dataInputStream.close();
-			fileOutputStream.close();
-			// ImageIO.write(image, qrcodeFormat, QrcodeFile);
-			MatrixToImageWriter.writeToStream(bitMatrix, qrcodeFormat, output);// (bitMatrix, qrcodeFormat, QrcodeFile);
-			qrcodeFilePath = "OK";
+			BitMatrix bitMatrix=new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, WIDTH, HEIGHT, hints);
+			Path path = new File(imageName).toPath();
+			MatrixToImageWriter.writeToPath(bitMatrix, FORMAT, path);//写到指定路径下
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return qrcodeFilePath;
+		
 	}
 
 	public static byte[] readInputStream(InputStream inputStream) throws IOException {

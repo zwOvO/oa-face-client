@@ -60,10 +60,10 @@ public class CaptureBasicUtils extends JPanel {
 		if (rects != null && rects.length >= 1) {
 			for (Rect rect : rects) {
 				if (rects.length == 1) {
-					synchronized (rects) {
-						Imgproc.rectangle(img, new Point(rect.x, rect.y),
-								new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 0, 255), 2);
-						if (!compareRunnable.isDeFace()) {
+					Imgproc.rectangle(img, new Point(rect.x, rect.y),
+							new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 0, 255), 2);
+					if (!compareRunnable.isDeFace()) {
+						synchronized (rects) {
 							compareRunnable.setImg(img);
 							compareRunnable.setUUID(uuid);
 							compareRunnable.setFaceToken(faceToken);
@@ -88,8 +88,6 @@ public class CaptureBasicUtils extends JPanel {
 		}
 		HOGDescriptor hog = new HOGDescriptor();
 		hog.setSVMDetector(HOGDescriptor.getDefaultPeopleDetector());
-		System.out.println(HOGDescriptor.getDefaultPeopleDetector());
-		// hog.setSVMDetector(HOGDescriptor.getDaimlerPeopleDetector());
 		MatOfRect regions = new MatOfRect();
 		MatOfDouble foundWeights = new MatOfDouble();
 		// System.out.println(foundWeights.toString());

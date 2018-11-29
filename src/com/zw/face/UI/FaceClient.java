@@ -97,8 +97,10 @@ public class FaceClient {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+
+		TTS.Speak("语音测试");
 		frame = new JFrame();
-		frame.setBounds(100, 100, 850, 500);
+		frame.setBounds(100, 100, 861, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -117,7 +119,7 @@ public class FaceClient {
 				}
 			}
 		};
-		panel.setBounds(10, 10, 600, 441);
+		panel.setBounds(232, 13, 597, 430);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
@@ -133,7 +135,7 @@ public class FaceClient {
 					File file = new File("Temp\\QRCode_" + uuid.toString().replaceAll("-", "") + ".png");
 					file.delete();
 				}
-				QRCodeUtils.createQrcode(uuid.toString().replaceAll("-", ""));
+				QRCodeUtils.createZxingqrCode(uuid.toString().replaceAll("-", ""));
 				ImageIcon icon = new ImageIcon("Temp\\QRCode_" + uuid.toString().replaceAll("-", "") + ".png");
 				Image img = icon.getImage();
 				d.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
@@ -141,7 +143,7 @@ public class FaceClient {
 
 		};
 		panelQRImg.repaint();
-		panelQRImg.setBounds(620, 10, 204, 193);
+		panelQRImg.setBounds(14, 13, 204, 193);
 		frame.getContentPane().add(panelQRImg);
 		JButton button = new JButton("刷新验证");
 		button.addActionListener(new ActionListener() {
@@ -154,12 +156,12 @@ public class FaceClient {
 				panelQRImg.repaint();
 			}
 		});
-		button.setBounds(620, 213, 204, 62);
+		button.setBounds(14, 216, 204, 62);
 		frame.getContentPane().add(button);
 
 		panelUserInfo = new JPanel();
 		panelUserInfo.setLayout(null);
-		panelUserInfo.setBounds(620, 285, 204, 166);
+		panelUserInfo.setBounds(14, 288, 204, 155);
 		panelUserInfo.setVisible(false);
 		frame.getContentPane().add(panelUserInfo);
 
@@ -201,7 +203,7 @@ public class FaceClient {
 					System.out.print("");
 					if (QRFlag) {
 						try {
-							Thread.sleep(2000);
+							Thread.sleep(1000);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -214,15 +216,17 @@ public class FaceClient {
 								uuid.toString().replaceAll("-", "")));
 						try {
 							if (res!=null && res.next()) {
-								lblName.setText(res.getString("username"));
-								TTS.Speak(res.getString("username")+"同学，请开始你的表演");
-								lblID.setText("用户性别:" + (res.getInt("gender")==1?"男":"女"));
-								faceToken = res.getString("face_token");
-								if (capture == null) {
-									openCamera(frame);
+								synchronized (res) {
+									TTS.Speak(res.getString("username")+"同学");
+									lblName.setText(res.getString("username"));
+									lblID.setText("用户性别:" + (res.getInt("gender")==1?"男":"女"));
+									faceToken = res.getString("face_token");
+									if (capture == null) {
+										openCamera(frame);
+									}
+									QRFlag = false;
+									CameraFlag = true;
 								}
-								QRFlag = false;
-								CameraFlag = true;
 							} else {
 								CameraFlag = false;
 								QRFlag = true;

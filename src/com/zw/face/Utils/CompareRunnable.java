@@ -70,7 +70,7 @@ public class CompareRunnable implements Runnable {
 			Imgcodecs.imwrite("Camera\\" + getUUID() + ".png", getImg());
 			ResultSet rs = DBUtils.select(String.format("select open_id from tb_record where status = 0 and id = '%s'", getUUID()));
 			try {
-				if (rs.next()) {
+				if (!rs.isClosed()&&rs.next()) {
 					isDeFace = true;
 					System.out.println("验证中...");
 					String res = BaiduAIApi.Compare(getFaceToken(),new FileInputStream(new File("Camera\\" + getUUID() + ".png")));
@@ -79,9 +79,9 @@ public class CompareRunnable implements Runnable {
 						JSONObject result = new JSONObject(res).getJSONObject("result");
 						Double score = result.getDouble("score");
 						if (score > 90) {
-							TTS.Speak("打卡成功");
 							DBUtils.execute(String.format("update tb_record set status = 1 where id = '%s'", getUUID()));
 							isSuccess = true;
+							TTS.Speak("打卡成功");
 							JOptionPane.showMessageDialog(null, "验证通过", "标题", JOptionPane.WARNING_MESSAGE);
 							FaceClient.CameraFlag = false;
 						} else {
