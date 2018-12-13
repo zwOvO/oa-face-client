@@ -75,28 +75,4 @@ public class CaptureBasicUtils extends JPanel {
 		}
 		return img;
 	}
-
-	/**
-	 * opencv实现人型识别，hog默认的分类器。所以效果不好。
-	 * 
-	 * @param img
-	 */
-	public static Mat detectPeople(Mat img) {
-		// System.out.println("detectPeople...");
-		if (img.empty()) {
-			System.out.println("image is exist");
-		}
-		HOGDescriptor hog = new HOGDescriptor();
-		hog.setSVMDetector(HOGDescriptor.getDefaultPeopleDetector());
-		MatOfRect regions = new MatOfRect();
-		MatOfDouble foundWeights = new MatOfDouble();
-		// System.out.println(foundWeights.toString());
-		hog.detectMultiScale(img, regions, foundWeights);
-		for (Rect rect : regions.toArray()) {
-			Imgproc.rectangle(img, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
-					new Scalar(0, 0, 255), 2);
-		}
-		return img;
-	}
-
 }

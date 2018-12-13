@@ -15,11 +15,14 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.VideoWriter;
 import org.opencv.videoio.Videoio;
 
 import com.zw.face.DB.DBUtils;
@@ -100,7 +103,15 @@ public class FaceClient {
 
 		TTS.Speak("语音测试");
 		frame = new JFrame();
-		frame.setBounds(100, 100, 861, 500);
+		frame.setBounds(100, 100, 469, 604);
+        try {
+
+    		frame.setDefaultLookAndFeelDecorated(true);
+			UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -119,7 +130,7 @@ public class FaceClient {
 				}
 			}
 		};
-		panel.setBounds(232, 13, 597, 430);
+		panel.setBounds(14, 219, 422, 326);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
@@ -152,17 +163,18 @@ public class FaceClient {
 				QRFlag = true;
 				CameraFlag = false;
 				panel.getGraphics().clearRect(0, 0, panel.getWidth(), panel.getHeight());
-				panelUserInfo.setVisible(CameraFlag);
+				panelUserInfo.setVisible(true);
+//				panelUserInfo.setVisible(CameraFlag);
 				panelQRImg.repaint();
 			}
 		});
-		button.setBounds(14, 216, 204, 62);
+		button.setBounds(232, 13, 204, 32);
 		frame.getContentPane().add(button);
 
 		panelUserInfo = new JPanel();
 		panelUserInfo.setLayout(null);
-		panelUserInfo.setBounds(14, 288, 204, 155);
-		panelUserInfo.setVisible(false);
+		panelUserInfo.setBounds(232, 58, 204, 148);
+		panelUserInfo.setVisible(true);
 		frame.getContentPane().add(panelUserInfo);
 
 		JLabel lbl1 = new JLabel("用户名称：");
@@ -186,13 +198,13 @@ public class FaceClient {
 		JLabel lbl2 = new JLabel("打卡状态");
 		lbl2.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl2.setFont(new Font("微软雅黑", Font.PLAIN, 14));
-		lbl2.setBounds(10, 104, 184, 24);
+		lbl2.setBounds(10, 92, 184, 24);
 		panelUserInfo.add(lbl2);
 
 		lblStatus = new JLabel("未打卡");
 		lblStatus.setHorizontalAlignment(SwingConstants.CENTER);
 		lblStatus.setFont(new Font("微软雅黑", Font.PLAIN, 14));
-		lblStatus.setBounds(10, 128, 184, 24);
+		lblStatus.setBounds(10, 114, 184, 24);
 		panelUserInfo.add(lblStatus);
 		QRThread = new Thread(new Runnable() {
 
@@ -243,7 +255,8 @@ public class FaceClient {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						panelUserInfo.setVisible(CameraFlag);
+						panelUserInfo.setVisible(true);
+//						panelUserInfo.setVisible(CameraFlag);
 
 					}
 				}
@@ -259,8 +272,14 @@ public class FaceClient {
 
 			Mat capImg = new Mat();
 			capture = new VideoCapture(0);
-			int height = (int) capture.get(Videoio.CAP_PROP_FRAME_HEIGHT);
-			int width = (int) capture.get(Videoio.CAP_PROP_FRAME_WIDTH);
+			int width = 460;
+			int height = 420;
+			int fourcc = VideoWriter.fourcc('M', 'J', 'P', 'G');
+			capture.set(Videoio.CAP_PROP_FOURCC, fourcc);
+			capture.set(Videoio.CAP_PROP_FRAME_WIDTH,width);		
+			capture.set(Videoio.CAP_PROP_FRAME_HEIGHT,height);
+//			int height = (int) capture.get(Videoio.CAP_PROP_FRAME_HEIGHT);
+//			int width = (int) capture.get(Videoio.CAP_PROP_FRAME_WIDTH);
 			if (height == 0 || width == 0) {
 				throw new Exception("camera not found!");
 			}

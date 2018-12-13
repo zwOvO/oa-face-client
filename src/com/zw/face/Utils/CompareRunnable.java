@@ -70,7 +70,7 @@ public class CompareRunnable implements Runnable {
 			Imgcodecs.imwrite("Camera\\" + getUUID() + ".png", getImg());
 			ResultSet rs = DBUtils.select(String.format("select open_id from tb_record where status = 0 and id = '%s'", getUUID()));
 			try {
-				if (!rs.isClosed()&&rs.next()) {
+				if (rs!=null&&!rs.isClosed()&&rs.next()) {
 					isDeFace = true;
 					System.out.println("验证中...");
 					String res = BaiduAIApi.Compare(getFaceToken(),new FileInputStream(new File("Camera\\" + getUUID() + ".png")));

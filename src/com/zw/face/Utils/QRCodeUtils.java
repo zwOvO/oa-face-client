@@ -64,40 +64,39 @@ public class QRCodeUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
-
-	public static byte[] readInputStream(InputStream inputStream) throws IOException {
-		byte[] buffer = new byte[1024];
-		int len = 0;
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		while ((len = inputStream.read(buffer)) != -1) {
-			bos.write(buffer, 0, len);
-		}
-
-		bos.close();
-		return bos.toByteArray();
-	}
-
-	/**
-	 * 解析图像
-	 */
-	public static void deCode(String filePath) {
-		BufferedImage image;
-		try {
-			image = ImageIO.read(new File(filePath));
-			LuminanceSource source = new BufferedImageLuminanceSource(image);
-			Binarizer binarizer = new HybridBinarizer(source);
-			BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
-			Map<DecodeHintType, Object> hints = new HashMap<DecodeHintType, Object>();
-			hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
-			Result result = new MultiFormatReader().decode(binaryBitmap, hints);// 对图像进行解码
-			System.out.println("图片中内容：  ");
-			System.out.println("content： " + result.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+//
+//	public static byte[] readInputStream(InputStream inputStream) throws IOException {
+//		byte[] buffer = new byte[1024];
+//		int len = 0;
+//		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//		while ((len = inputStream.read(buffer)) != -1) {
+//			bos.write(buffer, 0, len);
+//		}
+//
+//		bos.close();
+//		return bos.toByteArray();
+//	}
+//
+//	/**
+//	 * 解析图像
+//	 */
+//	public static void deCode(String filePath) {
+//		BufferedImage image;
+//		try {
+//			image = ImageIO.read(new File(filePath));
+//			LuminanceSource source = new BufferedImageLuminanceSource(image);
+//			Binarizer binarizer = new HybridBinarizer(source);
+//			BinaryBitmap binaryBitmap = new BinaryBitmap(binarizer);
+//			Map<DecodeHintType, Object> hints = new HashMap<DecodeHintType, Object>();
+//			hints.put(DecodeHintType.CHARACTER_SET, "UTF-8");
+//			Result result = new MultiFormatReader().decode(binaryBitmap, hints);// 对图像进行解码
+//			System.out.println("图片中内容：  ");
+//			System.out.println("content： " + result.toString());
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch (NotFoundException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }
