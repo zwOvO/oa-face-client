@@ -1,4 +1,6 @@
-package com.zw.face.DB;
+package com.zw.face.util;
+
+import com.zw.face.config.Config;
 
 import java.sql.*;
 
@@ -11,15 +13,15 @@ public class DBUtils {
 	}
 
 	static {
-		String DBURL = "jdbc:mysql://106.12.152.251:3306/oa";
-		String DBName = "root";
-		String DBPwd = "daxiongdi_cs1701";
+		String DBURL = Config.DB_URL;
+		String DBNAME = Config.DB_NAME;
+		String DBPWD = Config.DB_PWD;
 		try {
 			// 注册JDBC驱动
 			Class.forName("com.mysql.jdbc.Driver");
 			System.out.println("连接数据库...");
 			// 打开链接
-			conn = DriverManager.getConnection(DBURL, DBName, DBPwd);
+			conn = DriverManager.getConnection(DBURL, DBNAME, DBPWD);
 			stmt = conn.createStatement();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block

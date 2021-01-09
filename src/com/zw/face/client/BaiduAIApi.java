@@ -1,15 +1,14 @@
-package com.zw.face.Api;
+package com.zw.face.client;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.json.JSONObject;
 
 import com.baidu.aip.face.AipFace;
 import com.baidu.aip.face.MatchRequest;
-import com.zw.face.Config.Config;
+import com.zw.face.config.Config;
 
 import sun.misc.BASE64Encoder;
 

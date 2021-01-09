@@ -1,4 +1,4 @@
-package com.zw.face.Utils;
+package com.zw.face.runnable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,14 +6,14 @@ import java.sql.ResultSet;
 
 import javax.swing.JOptionPane;
 
-import org.json.JSONArray;
+import com.zw.face.ui.FaceClient;
+import com.zw.face.util.TTS;
 import org.json.JSONObject;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
-import com.zw.face.Api.BaiduAIApi;
-import com.zw.face.DB.DBUtils;
-import com.zw.face.UI.FaceClient;
+import com.zw.face.client.BaiduAIApi;
+import com.zw.face.util.DBUtils;
 
 public class CompareRunnable implements Runnable {
 
@@ -65,7 +65,6 @@ public class CompareRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		synchronized (UUID) {
 			Imgcodecs.imwrite("Camera\\" + getUUID() + ".png", getImg());
 			ResultSet rs = DBUtils.select(String.format("select open_id from tb_record where status = 0 and id = '%s'", getUUID()));

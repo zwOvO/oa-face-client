@@ -1,4 +1,4 @@
-package com.zw.face.UI;
+package com.zw.face.ui;
 
 import java.awt.EventQueue;
 
@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,8 +18,10 @@ import java.util.UUID;
 
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
+import com.zw.face.config.Config;
+import com.zw.face.runnable.CompareRunnable;
+import com.zw.face.util.DBUtils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
@@ -25,19 +29,15 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.VideoWriter;
 import org.opencv.videoio.Videoio;
 
-import com.zw.face.DB.DBUtils;
-import com.zw.face.Utils.CaptureBasicUtils;
-import com.zw.face.Utils.CompareRunnable;
-import com.zw.face.Utils.QRCodeUtils;
-import com.zw.face.Utils.TTS;
+import com.zw.face.util.CaptureBasicUtils;
+import com.zw.face.util.QRCodeUtils;
+import com.zw.face.util.TTS;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class FaceClient {
@@ -59,14 +59,12 @@ public class FaceClient {
 	private static String faceToken;
 	
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FaceClient window = new FaceClient();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				FaceClient window = new FaceClient();
+				window.frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
@@ -109,7 +107,7 @@ public class FaceClient {
     		frame.setDefaultLookAndFeelDecorated(true);
 			UIManager.setLookAndFeel("com.jtattoo.plaf.mcwin.McWinLookAndFeel");
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -123,7 +121,7 @@ public class FaceClient {
 
 			@Override
 			protected void paintComponent(Graphics g) {
-				// TODO Auto-generated method stub
+				
 				super.paintComponent(g);
 				if (mImg != null) {
 					g.drawImage(mImg, 0, 0, mImg.getWidth(), mImg.getHeight(), this);
@@ -210,14 +208,12 @@ public class FaceClient {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				while (true) {
 					System.out.print("");
 					if (QRFlag) {
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						Date date = new Date();
@@ -252,12 +248,10 @@ public class FaceClient {
 								panel.getGraphics().clearRect(0, 0, panel.getWidth(), panel.getHeight());
 							}
 						} catch (SQLException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
 						panelUserInfo.setVisible(true);
-//						panelUserInfo.setVisible(CameraFlag);
-
 					}
 				}
 			}
@@ -278,8 +272,6 @@ public class FaceClient {
 			capture.set(Videoio.CAP_PROP_FOURCC, fourcc);
 			capture.set(Videoio.CAP_PROP_FRAME_WIDTH,width);		
 			capture.set(Videoio.CAP_PROP_FRAME_HEIGHT,height);
-//			int height = (int) capture.get(Videoio.CAP_PROP_FRAME_HEIGHT);
-//			int width = (int) capture.get(Videoio.CAP_PROP_FRAME_WIDTH);
 			if (height == 0 || width == 0) {
 				throw new Exception("camera not found!");
 			}
@@ -288,7 +280,6 @@ public class FaceClient {
 
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
 					while (true) {
 						if (CameraFlag) {
 							try {
@@ -309,7 +300,6 @@ public class FaceClient {
 									panel.repaint();
 								}
 							} catch (Exception e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
